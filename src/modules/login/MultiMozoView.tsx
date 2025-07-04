@@ -1,18 +1,18 @@
 
 import React, { useState } from 'react';
 import './LoginView.css';
-import { loginMozo } from './api';
+import { loginMozo } from '../../api/api';
 
 const MultiMozoView: React.FC<{ onAdmin: () => void }> = ({ onAdmin }) => {
-  const [code, setCodigo] = useState('');
+  const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleVirtualKey = (val: string) => {
     if (val === 'DEL') {
-      setCodigo(code.slice(0, -1));
+      setCode(code.slice(0, -1));
     } else {
-      setCodigo(code + val);
+      setCode(code + val);
     }
   };
 
@@ -28,9 +28,12 @@ const MultiMozoView: React.FC<{ onAdmin: () => void }> = ({ onAdmin }) => {
     try {
       const data = await loginMozo(code);
       setLoading(false);
-      if (data.token && data.usuario) {
+      if (data.token && data.user) {
         localStorage.setItem('token', data.token);
-        localStorage.setItem('usuario', JSON.stringify(data.usuario));
+        if (data.expires_at) {
+          localStorage.setItem('token_expires_at', data.expires_at);
+        }
+        localStorage.setItem('user', JSON.stringify(data.user));
         window.location.href = '/dashboard';
       } else {
         setError(data.message || 'Código incorrecto');
@@ -72,7 +75,7 @@ const MultiMozoView: React.FC<{ onAdmin: () => void }> = ({ onAdmin }) => {
                       autoComplete="off"
                       required
                       value={code}
-                      onChange={e => setCodigo(e.target.value)}
+                      onChange={e => setCode(e.target.value)}
                       placeholder="Código"
                     />
                   </div>

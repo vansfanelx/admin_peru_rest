@@ -1,0 +1,94 @@
+/* Estilos base para el módulo de Ajustes */
+.ajuste-container {
+  width: 100%;
+  max-width: 100vw;
+  margin: 0 auto;
+  padding: 0 0 32px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.ajuste-header {
+  margin-bottom: 12px;
+}
+.ajuste-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #222;
+}
+.ajuste-breadcrumb {
+  font-size: 15px;
+  color: #888;
+  margin-top: 2px;
+}
+.ajuste-panels {
+  display: flex;
+  gap: 32px;
+  width: 100%;
+}
+.ajuste-panel {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(44,62,80,0.07);
+  padding: 18px 0 8px 0;
+  flex: 1 1 0;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #f0f1f6;
+}
+.ajuste-panel-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 14px;
+  letter-spacing: -0.5px;
+  padding-left: 32px;
+}
+.ajuste-panel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.ajuste-panel-item {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 32px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.ajuste-panel-item:last-child {
+  border-bottom: none;
+}
+.ajuste-panel-item:hover {
+  background: #f7f8fa;
+}
+.ajuste-panel-icon {
+  font-size: 28px;
+  width: 38px;
+  text-align: center;
+}
+.ajuste-panel-item-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+}
+.ajuste-panel-item-desc {
+  font-size: 13px;
+  color: #888;
+}
+.orange .ajuste-panel-icon { color: #fbbf24; }
+.green .ajuste-panel-icon { color: #22c55e; }
+.purple .ajuste-panel-icon { color: #8b5cf6; }
+
+@media (max-width: 1200px) {
+  .ajuste-panels {
+    flex-direction: column;
+    gap: 18px;
+  }
+  .ajuste-panel {
+    min-width: 0;
+  }
+}

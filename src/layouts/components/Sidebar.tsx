@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -12,11 +13,24 @@ type MenuItem = {
   subitems?: { key: string; label: string }[];
 };
 
+
+import iconSidebarFile from '../../assets/icons/icon-sidebar-file.svg';
+import iconSidebarMonitor from '../../assets/icons/icon-sidebar-monitor.svg';
+import iconSidebarUser from '../../assets/icons/icon-sidebar-user.svg';
+import iconSidebarCart from '../../assets/icons/icon-sidebar-cart.svg';
+import iconSidebarCreditcard from '../../assets/icons/icon-sidebar-creditcard.svg';
+import iconSidebarBox from '../../assets/icons/icon-sidebar-box.svg';
+import iconSidebarTablet from '../../assets/icons/icon-sidebar-tablet.svg';
+import iconSidebarArchive from '../../assets/icons/icon-sidebar-archive.svg';
+import iconSidebarList from '../../assets/icons/icon-sidebar-list.svg';
+import iconSidebarSettings from '../../assets/icons/icon-sidebar-settings.svg';
+import iconSidebarActivity from '../../assets/icons/icon-sidebar-activity.svg';
+
 const menuItems: MenuItem[] = [
-  { key: 'punto-venta', icon: '/images/icon-sidebar-file.svg', label: 'Punto de Venta' },
+  { key: 'punto-venta', icon: iconSidebarFile, label: 'Punto de Venta' },
   {
     key: 'caja',
-    icon: '/images/icon-sidebar-monitor.svg',
+    icon: iconSidebarMonitor,
     label: 'Caja',
     arrow: true,
     subitems: [
@@ -26,10 +40,10 @@ const menuItems: MenuItem[] = [
       { key: 'monitor-ventas', label: 'Monitor de ventas' },
     ],
   },
-  { key: 'clientes', icon: '/images/icon-sidebar-user.svg', label: 'Clientes' },
+  { key: 'clientes', icon: iconSidebarUser, label: 'Clientes' },
   {
     key: 'compras',
-    icon: '/images/icon-sidebar-cart.svg',
+    icon: iconSidebarCart,
     label: 'Compras',
     arrow: true,
     subitems: [
@@ -39,7 +53,7 @@ const menuItems: MenuItem[] = [
   },
   {
     key: 'creditos',
-    icon: '/images/icon-sidebar-creditcard.svg',
+    icon: iconSidebarCreditcard,
     label: 'Creditos',
     arrow: true,
     subitems: [
@@ -49,7 +63,7 @@ const menuItems: MenuItem[] = [
   },
   {
     key: 'inventario',
-    icon: '/images/icon-sidebar-box.svg',
+    icon: iconSidebarBox,
     label: 'Inventario',
     arrow: true,
     subitems: [
@@ -59,17 +73,34 @@ const menuItems: MenuItem[] = [
       { key: 'kardex', label: 'Kardex' },
     ],
   },
-  { key: 'reservas', icon: '/images/icon-sidebar-file.svg', label: 'Reservas' },
-  { key: 'carta-digital', icon: '/images/icon-sidebar-tablet.svg', label: 'Carta Digital' },
-  { key: 'produccion', icon: '/images/icon-sidebar-cart.svg', label: 'Producción' },
-  { key: 'contable', icon: '/images/icon-sidebar-archive.svg', label: 'Contable' },
-  { key: 'informes', icon: '/images/icon-sidebar-list.svg', label: 'Informes' },
-  { key: 'ajustes', icon: '/images/icon-sidebar-settings.svg', label: 'Ajustes' },
-  { key: 'tablero', icon: '/images/icon-sidebar-activity.svg', label: 'Tablero' },
+  { key: 'reservas', 
+    icon: iconSidebarFile, 
+    label: 'Reservas',
+    arrow: true
+  },
+  { key: 'carta-digital', icon: iconSidebarTablet, label: 'Carta Digital' },
+  { key: 'produccion', icon: iconSidebarCart, label: 'Producción' },
+  { key: 'contable', icon: iconSidebarArchive, label: 'Contable' },
+  { key: 'informes', icon: iconSidebarList, label: 'Informes' },
+  {
+    key: 'ajustes',
+    icon: iconSidebarSettings,
+    label: 'Ajustes',
+    arrow: true,
+    subitems: [
+      { key: 'salones-mesas', label: 'Salones y Mesas' },
+      // Puedes agregar más subitems aquí si lo deseas
+    ],
+  },
+  { key: 'tablero', icon: iconSidebarActivity, label: 'Tablero' },
 ];
 
 const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
-  const [active, setActive] = useState('tablero');
+  const navigate = useNavigate();
+  // Determinar el activo según la ruta
+  const currentPath = window.location.pathname;
+  const initialActive = currentPath.startsWith('/ajuste') ? 'ajustes' : (currentPath === '/dashboard' || currentPath === '/' ? 'tablero' : '');
+  const [active, setActive] = useState(initialActive);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
   const [submenuPosition, setSubmenuPosition] = useState<{ x: number; y: number } | null>(null);
@@ -77,14 +108,41 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
 
   const handleMenuClick = (key: string, hasSubitems: boolean) => {
     setActive(key);
+    // Navegación para Ajustes y Tablero
+    if (key === 'ajustes') {
+      navigate('/ajuste');
+      return;
+    }
+    if (key === 'salones-mesas') {
+      navigate('/ajuste/salones-mesas');
+      return;
+    }
+    if (key === 'tablero') {
+      navigate('/dashboard');
+      return;
+    }
     if (hasSubitems) {
       if (sidebarOpen) {
         setOpenSubmenu(openSubmenu === key ? null : key);
       }
     } else {
       setOpenSubmenu(null);
+      if (key === 'reservas') {
+        navigate('/reservas');
+        return;
+      }
     }
   };
+
+  // Obtener el usuario logueado del localStorage (acepta 'user' o 'usuario')
+  let userName = 'Usuario';
+  try {
+    let userStr = localStorage.getItem('user') || localStorage.getItem('usuario');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      userName = user.username || user.name || 'Usuario';
+    }
+  } catch {}
 
   return (
     <aside className={`main-sidebar${sidebarOpen ? ' open' : ''}`}>
@@ -95,7 +153,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
           alt="Avatar"
           style={{ width: 36, height: 36 }}
         />
-        {sidebarOpen && <div className="sidebar-profile-name">JONATHAN</div>}
+        {sidebarOpen && <div className="sidebar-profile-name">{userName}</div>}
       </div>
       <nav className="sidebar-menu">
         {menuItems.map((item, idx) => (
@@ -104,31 +162,27 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
               className={`sidebar-menu-item${active === item.key ? ' sidebar-menu-active sidebar-menu-animate' : ''}${idx !== 0 ? ' sidebar-menu-item-bordered' : ''}`}
               onClick={e => {
                 handleMenuClick(item.key, !!item.subitems);
-                if (!sidebarOpen && item.subitems) {
-                  setHoveredMenu(item.key);
-                  setSubmenuFixed(item.key);
-                  const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-                  setSubmenuPosition({ x: rect.right, y: rect.top + rect.height / 2 });
-                } else if (!sidebarOpen) {
+                if (!sidebarOpen) {
+                  // Al hacer click, cerrar cualquier menú flotante
                   setHoveredMenu(null);
                   setSubmenuFixed(null);
                   setSubmenuPosition(null);
                 }
               }}
               onMouseEnter={e => {
-                if (!sidebarOpen && item.subitems && !submenuFixed) {
+                if (!sidebarOpen && !submenuFixed) {
                   setHoveredMenu(item.key);
                   const rect = (e.target as HTMLElement).getBoundingClientRect();
                   setSubmenuPosition({ x: rect.right, y: e.clientY });
                 }
               }}
               onMouseMove={e => {
-                if (!sidebarOpen && item.subitems && hoveredMenu === item.key && !submenuFixed) {
+                if (!sidebarOpen && hoveredMenu === item.key && !submenuFixed) {
                   setSubmenuPosition({ x: e.clientX, y: e.clientY });
                 }
               }}
               onMouseLeave={() => {
-                if (!sidebarOpen && item.subitems && !submenuFixed) {
+                if (!sidebarOpen && !submenuFixed) {
                   setHoveredMenu(null);
                   setSubmenuPosition(null);
                 }
@@ -159,6 +213,13 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
                     onClick={e => {
                       e.stopPropagation();
                       setActive(sub.key);
+                      if (sub.key === 'salones-mesas') {
+                        navigate('/ajuste/salones-mesas');
+                      } else if (sub.key === 'listar-reservas') {
+                        navigate('/reservas');
+                      } else if (sub.key === 'registrar-reservas') {
+                        navigate('/reservas?modal=nueva');
+                      }
                     }}
                   >
                     {sub.label}
@@ -166,8 +227,8 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
                 ))}
               </div>
             )}
-            {/* Submenu flotante en modo colapsado */}
-            {!sidebarOpen && item.subitems && ((hoveredMenu === item.key && submenuPosition) || submenuFixed === item.key) && (
+            {/* Menú flotante SIEMPRE en modo colapsado, siempre muestra el nombre y subíndices si existen */}
+            {!sidebarOpen && hoveredMenu === item.key && submenuPosition && (
               <div
                 className="sidebar-submenu sidebar-submenu-floating"
                 style={{
@@ -175,24 +236,39 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
                   left: (submenuPosition?.x ?? 0) + 10,
                   top: (submenuPosition?.y ?? 0) - 20,
                   zIndex: 1000,
-                  minWidth: 160,
+                  minWidth: 180,
                   background: '#fff',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
                   borderRadius: 6,
-                  padding: '8px 0',
+                  padding: item.subitems ? '0 0 8px 0' : '0',
                   pointerEvents: 'auto',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'stretch',
                 }}
                 onMouseEnter={() => {
                   setHoveredMenu(item.key);
                 }}
                 onMouseLeave={() => {
-                  if (!submenuFixed) {
-                    setHoveredMenu(null);
-                    setSubmenuPosition(null);
-                  }
+                  setHoveredMenu(null);
+                  setSubmenuPosition(null);
                 }}
               >
-                {item.subitems.map(sub => (
+                {/* Nombre del módulo arriba del submenu o solo el nombre si no hay subíndices */}
+                <div style={{
+                  padding: item.subitems ? '10px 20px 6px 20px' : '16px 24px',
+                  fontWeight: 700,
+                  fontSize: 15,
+                  color: '#4e54c8',
+                  borderBottom: item.subitems ? '1px solid #f0f0f0' : 'none',
+                  background: '#f7f8fa',
+                  borderTopLeftRadius: 6,
+                  borderTopRightRadius: 6,
+                  marginBottom: item.subitems ? 4 : 0,
+                  textAlign: 'center',
+                  minWidth: 140
+                }}>{item.label}</div>
+                {item.subitems && item.subitems.map(sub => (
                   <div
                     key={sub.key}
                     className={`sidebar-submenu-item${active === sub.key ? ' sidebar-submenu-item-active' : ''}`}

@@ -5,13 +5,18 @@ interface LoginViewProps {
   multiMozoButton?: () => void;
 }
 import './LoginView.css';
-import { login } from './api';
+import { login } from '../../api/api';
 
 const LoginView: React.FC<LoginViewProps> = ({ multiMozoButton }) => {
-  // Redirige al dashboard si ya hay token
+  // Redirige al dashboard si ya hay token válido
   const token = localStorage.getItem('token');
-  if (token) {
+  const expiresAt = localStorage.getItem('token_expires_at');
+  if (token && expiresAt && new Date() < new Date(expiresAt)) {
     return <Navigate to="/dashboard" replace />;
+  } else if (token && expiresAt && new Date() >= new Date(expiresAt)) {
+    localStorage.removeItem('token');
+    localStorage.removeItem('token_expires_at');
+    localStorage.removeItem('user');
   }
 
   const [username, setUsername] = useState('');
@@ -32,13 +37,16 @@ const LoginView: React.FC<LoginViewProps> = ({ multiMozoButton }) => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    try {
+  e.preventDefault();
+  setLoading(true);
+  setError('');
+  try {
       const data = await login(username, password);
       if (data.token) {
         localStorage.setItem('token', data.token);
+        if (data.expires_at) {
+          localStorage.setItem('token_expires_at', data.expires_at);
+        }
         if (data.user) {
           localStorage.setItem('user', JSON.stringify(data.user));
         }

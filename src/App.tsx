@@ -13,7 +13,12 @@ import ResetPasswordView from './modules/login/ResetPasswordView';
 import ValidarCorreoView from './modules/login/ValidarCorreoView';
 import ReenviarValidacionView from './modules/login/ReenviarValidacionView';
 import LogoutView from './modules/login/LogoutView';
+
 import DashboardView from './modules/dashboard/DashboardView';
+import AjusteView from './modules/ajuste/AjusteView';
+
+import SalonesMesasView from './modules/ajuste/components/SalonesMesas/SalonesMesasView';
+import ReservasView from './modules/reservas/ReservasView';
 
 const App: React.FC = () => {
   return (
@@ -26,6 +31,9 @@ const App: React.FC = () => {
           <Route element={<MainLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/admin/logout" element={<LogoutView />} />
+            <Route path="/ajuste" element={<AjusteView />} />
+            <Route path="/ajuste/salones-mesas" element={<SalonesMesasView />} />
+            <Route path="/reservas" element={<ReservasView />} />
             <Route index element={<DashboardView />} />
           </Route>
         </Route>

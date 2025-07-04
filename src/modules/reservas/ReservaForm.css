@@ -1,0 +1,244 @@
+/* Tarjetas de mesas libres en ReservaForm */
+.reserva-form-mesa-card {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 12px 18px;
+  background: #f9fafb;
+  cursor: pointer;
+  min-width: 110px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  transition: border 0.2s, box-shadow 0.2s;
+  margin-bottom: 4px;
+}
+.reserva-form-mesa-card.selected {
+  border: 2px solid #3182ce;
+  box-shadow: 0 2px 8px #3182ce22;
+}
+.reserva-form-mesa-nro {
+  font-weight: 600;
+  font-size: 16px;
+}
+.reserva-form-mesa-cap {
+  font-size: 13px;
+  color: #555;
+}
+.reserva-form-mesa-seleccionada {
+  color: #3182ce;
+  font-weight: 600;
+  font-size: 13px;
+  margin-top: 4px;
+}
+/* Autocompletado de cliente en ReservaForm */
+.reserva-form-autocomplete {
+  position: absolute;
+  top: 38px;
+  left: 0;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  z-index: 10;
+  width: 100%;
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+.reserva-form-autocomplete-item {
+  padding: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.reserva-form-autocomplete-item:hover {
+  background: #f1f5f9;
+}
+
+.reserva-form-autocomplete-empty {
+  padding: 8px;
+  color: #888;
+}
+/* Modal overlay para ReservasView */
+.reserva-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.18);
+  z-index: 1002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reserva-modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px;
+  min-width: 540px;
+  min-height: 220px;
+  max-width: 700px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.13);
+  position: relative;
+}
+
+.reserva-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.reserva-modal-close:hover {
+  color: #3182ce;
+}
+.reserva-form {
+  background: #f5f8fa;
+  max-width: 540px;
+  min-width: 320px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 380px;
+  box-sizing: border-box;
+  padding: 36px 32px;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px #0001;
+}
+
+.reserva-form-form {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.reserva-form-title {
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+
+.reserva-form-fields {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 18px;
+}
+
+.reserva-form-field {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.reserva-form-label {
+  margin-bottom: 2px;
+  font-weight: 500;
+  display: block;
+}
+
+.reserva-form-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.reserva-form-input {
+  width: 100%;
+  min-width: 220px;
+  max-width: 340px;
+  min-height: 32px;
+  font-size: 15px;
+  padding: 7px 12px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  box-sizing: border-box;
+}
+
+.reserva-form-row {
+  grid-column: 1 / span 2;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-items: stretch;
+  align-items: center;
+}
+.reserva-form-btn-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+}
+
+.reserva-form-btn {
+  min-width: 150px;
+  min-height: 32px;
+  justify-content: center;
+  width: 100%;
+  font-weight: 600;
+  padding: 7px 18px;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .reserva-form-fields {
+    grid-template-columns: 1fr;
+  }
+  .reserva-form-row {
+    grid-column: 1;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .reserva-form-btn-wrapper {
+    justify-content: flex-start;
+  }
+}
+.reserva-form {
+  background: #f1f5f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.reserva-form h2 {
+  margin-top: 0;
+  color: #2d3748;
+  font-size: 1.2rem;
+}
+.reserva-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.reserva-form label {
+  font-weight: 500;
+  color: #374151;
+}
+.reserva-form input[type="text"],
+.reserva-form input[type="date"] {
+  padding: 0.5rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+.reserva-form button {
+  background: #3182ce;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  align-self: flex-start;
+}
+.reserva-form button:hover {
+  background: #2563eb;
+}
+
