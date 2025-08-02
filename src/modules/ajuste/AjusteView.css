@@ -1,94 +1,311 @@
 /* Estilos base para el módulo de Ajustes */
 .ajuste-container {
+  /* Usar los estilos globales del view-container */
   width: 100%;
-  max-width: 100vw;
-  margin: 0 auto;
-  padding: 0 0 32px 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 32px;
   display: flex;
   flex-direction: column;
   gap: 32px;
+  background: #f7f8fa;
+  min-height: calc(100vh - 80px);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
-.ajuste-header {
-  margin-bottom: 12px;
-}
-.ajuste-title {
-  font-size: 26px;
-  font-weight: 700;
-  color: #222;
-}
-.ajuste-breadcrumb {
-  font-size: 15px;
-  color: #888;
-  margin-top: 2px;
-}
+
 .ajuste-panels {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
   gap: 32px;
   width: 100%;
+  flex: 1;
+  margin-top: 0;
 }
+
 .ajuste-panel {
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 18px rgba(44,62,80,0.07);
-  padding: 18px 0 8px 0;
-  flex: 1 1 0;
-  min-width: 320px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 0;
   display: flex;
   flex-direction: column;
-  border: 1px solid #f0f1f6;
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+  min-height: 480px;
+  transition: all 0.3s ease;
 }
+
+.ajuste-panel:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+}
+
 .ajuste-panel-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 14px;
+  color: #2c3e50;
+  margin: 0;
   letter-spacing: -0.5px;
-  padding-left: 32px;
+  padding: 28px 32px 20px 32px;
+  border-bottom: 1px solid #e9ecef;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 16px 16px 0 0;
+  flex-shrink: 0;
 }
 .ajuste-panel-list {
   display: flex;
   flex-direction: column;
   gap: 0;
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 0;
 }
+
 .ajuste-panel-item {
   display: flex;
   align-items: center;
-  gap: 18px;
-  padding: 18px 32px;
+  gap: 24px;
+  padding: 24px 32px;
   border-bottom: 1px solid #f0f0f0;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: all 0.3s ease;
+  background: white;
+  flex-shrink: 0;
+  position: relative;
 }
+
 .ajuste-panel-item:last-child {
   border-bottom: none;
+  border-radius: 0 0 16px 16px;
 }
+
 .ajuste-panel-item:hover {
-  background: #f7f8fa;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding-left: 40px;
+}
+
+.ajuste-panel-item:hover::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(135deg, #4e54c8 0%, #6366f1 100%);
+  border-radius: 0 4px 4px 0;
 }
 .ajuste-panel-icon {
-  font-size: 28px;
-  width: 38px;
-  text-align: center;
+  font-size: 32px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  flex-shrink: 0;
+  background: rgba(78, 84, 200, 0.1);
+  transition: all 0.3s ease;
 }
+
+.ajuste-panel-item:hover .ajuste-panel-icon {
+  transform: scale(1.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.ajuste-panel-item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .ajuste-panel-item-title {
   font-size: 16px;
   font-weight: 600;
-  color: #222;
+  color: #2c3e50;
+  margin: 0;
+  line-height: 1.3;
 }
-.ajuste-panel-item-desc {
-  font-size: 13px;
-  color: #888;
-}
-.orange .ajuste-panel-icon { color: #fbbf24; }
-.green .ajuste-panel-icon { color: #22c55e; }
-.purple .ajuste-panel-icon { color: #8b5cf6; }
 
+.ajuste-panel-item-desc {
+  font-size: 14px;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.4;
+}
+/* Colores específicos para iconos */
+.orange .ajuste-panel-icon {
+  color: #f59e0b;
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.1) 0%,
+    rgba(245, 158, 11, 0.2) 100%
+  );
+}
+
+.green .ajuste-panel-icon {
+  color: #10b981;
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.1) 0%,
+    rgba(16, 185, 129, 0.2) 100%
+  );
+}
+
+.purple .ajuste-panel-icon {
+  color: #8b5cf6;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.1) 0%,
+    rgba(139, 92, 246, 0.2) 100%
+  );
+}
+
+.blue .ajuste-panel-icon {
+  color: #3b82f6;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.1) 0%,
+    rgba(59, 130, 246, 0.2) 100%
+  );
+}
+
+/* Responsivo para pantallas medianas */
 @media (max-width: 1200px) {
+  .ajuste-container {
+    padding: 28px;
+  }
+
   .ajuste-panels {
-    flex-direction: column;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 28px;
+  }
+
+  .ajuste-panel {
+    min-height: 440px;
+  }
+
+  .ajuste-panel-title {
+    font-size: 18px;
+    padding: 24px 28px 18px 28px;
+  }
+
+  .ajuste-panel-item {
+    padding: 20px 28px;
+    gap: 20px;
+  }
+
+  .ajuste-panel-item:hover {
+    padding-left: 36px;
+  }
+
+  .ajuste-panel-icon {
+    font-size: 28px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .ajuste-panel-item-title {
+    font-size: 15px;
+  }
+
+  .ajuste-panel-item-desc {
+    font-size: 13px;
+  }
+}
+
+/* Responsivo para pantallas pequeñas */
+@media (max-width: 768px) {
+  .ajuste-container {
+    padding: 24px;
+  }
+
+  .ajuste-panels {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .ajuste-panel {
+    min-height: 400px;
+  }
+
+  .ajuste-panel-title {
+    font-size: 17px;
+    padding: 22px 24px 16px 24px;
+  }
+
+  .ajuste-panel-item {
+    padding: 18px 24px;
     gap: 18px;
   }
+
+  .ajuste-panel-item:hover {
+    padding-left: 32px;
+  }
+
+  .ajuste-panel-icon {
+    font-size: 26px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .ajuste-panel-item-title {
+    font-size: 14px;
+  }
+
+  .ajuste-panel-item-desc {
+    font-size: 12px;
+  }
+}
+
+/* Responsivo para pantallas muy pequeñas (móviles) */
+@media (max-width: 480px) {
+  .ajuste-container {
+    padding: 20px;
+  }
+
+  .ajuste-panels {
+    gap: 20px;
+  }
+
   .ajuste-panel {
-    min-width: 0;
+    min-height: 360px;
+    border-radius: 12px;
+  }
+
+  .ajuste-panel-title {
+    font-size: 16px;
+    padding: 20px 20px 16px 20px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .ajuste-panel-item {
+    padding: 16px 20px;
+    gap: 16px;
+  }
+
+  .ajuste-panel-item:hover {
+    padding-left: 28px;
+  }
+
+  .ajuste-panel-item:last-child {
+    border-radius: 0 0 12px 12px;
+  }
+
+  .ajuste-panel-icon {
+    font-size: 24px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+
+  .ajuste-panel-item-title {
+    font-size: 13px;
+  }
+
+  .ajuste-panel-item-desc {
+    font-size: 11px;
   }
 }

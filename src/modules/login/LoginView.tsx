@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 
 interface LoginViewProps {
@@ -11,13 +11,38 @@ const LoginView: React.FC<LoginViewProps> = ({ multiMozoButton }) => {
   // Redirige al dashboard si ya hay token válido
   const token = localStorage.getItem('token');
   const expiresAt = localStorage.getItem('token_expires_at');
-  if (token && expiresAt && new Date() < new Date(expiresAt)) {
+  const [sessionExpired, setSessionExpired] = useState(false);
+
+  // Redirige si el token es válido y no ha expirado
+  if (token && expiresAt && new Date() < new Date(expiresAt) && !sessionExpired) {
     return <Navigate to="/dashboard" replace />;
-  } else if (token && expiresAt && new Date() >= new Date(expiresAt)) {
-    localStorage.removeItem('token');
-    localStorage.removeItem('token_expires_at');
-    localStorage.removeItem('user');
   }
+
+  // Efecto para cerrar sesión automáticamente cuando expire el token
+  useEffect(() => {
+    if (!token || !expiresAt) return;
+    const checkSession = () => {
+      const now = new Date();
+      if (new Date(expiresAt) <= now) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('token_expires_at');
+        localStorage.removeItem('user');
+        setSessionExpired(true);
+      }
+    };
+    // Verifica cada 10 segundos
+    const interval = setInterval(checkSession, 10000);
+    // Verifica al cargar
+    checkSession();
+    return () => clearInterval(interval);
+  }, [token, expiresAt]);
+
+  // Si la sesión expiró, redirige al login
+  useEffect(() => {
+    if (sessionExpired) {
+      window.location.href = '/login';
+    }
+  }, [sessionExpired]);
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -66,11 +91,11 @@ const LoginView: React.FC<LoginViewProps> = ({ multiMozoButton }) => {
       <div className="container-fluid gx-0">
         <div className="row gx-0">
           {/* Imagen a la izquierda: 2/3 del ancho */}
-          <div className="col-12 col-md-8 d-none d-md-flex p-0">
+          <div className="col-md-8 p-0">
             <div className="login-bg-image"></div>
           </div>
           {/* Login a la derecha: 1/3 del ancho */}
-          <div className="col-12 col-md-4 d-flex align-items-center justify-content-center p-0 login-form-col">
+          <div className="col-md-4 d-flex align-items-center justify-content-center p-0 login-form-col">
             <div className="w-100 login-form-wrapper">
               <div>
                 <img
@@ -140,6 +165,9 @@ const LoginView: React.FC<LoginViewProps> = ({ multiMozoButton }) => {
                     {loading ? 'Cargando...' : 'Iniciar Sesión'}
                   </button>
                   {error && <div className="alert alert-danger mt-2">{error}</div>}
+                  {sessionExpired && (
+                    <div className="alert alert-warning mt-2">Tu sesión ha expirado. Por favor, inicia sesión nuevamente.</div>
+                  )}
                 </form>
                 <button
                   className="btn btn-block btn-lg btn-multimozo"

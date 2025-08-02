@@ -3,6 +3,19 @@ import './FiltrosReservas.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+export interface FiltrosReservasProps {
+  filtros: {
+    fecha_inicio?: string;
+    fecha_fin?: string;
+    estado?: string;
+    cliente?: string;
+    capacidad?: string | number;
+    nro_mesa?: string;
+  };
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | { target: { name: string; value: string } }) => void;
+  onBuscar: () => void;
+}
+
 const estados = [
   { value: '', label: 'Todos' },
   { value: 'pendiente', label: 'Pendiente' },
@@ -10,7 +23,7 @@ const estados = [
   { value: 'anulada', label: 'Anulada' },
 ];
 
-const FiltrosReservas = ({ filtros, onChange, onBuscar }) => {
+const FiltrosReservas: React.FC<FiltrosReservasProps> = ({ filtros, onChange, onBuscar }) => {
   return (
     <div className="filtros-reservas">
       <h3>Filtros</h3>
@@ -19,7 +32,7 @@ const FiltrosReservas = ({ filtros, onChange, onBuscar }) => {
           <label style={{ fontSize: 13 }}>Fecha inicio</label><br />
           <DatePicker
             selected={filtros.fecha_inicio ? new Date(filtros.fecha_inicio) : null}
-            onChange={date => onChange({ target: { name: 'fecha_inicio', value: date ? date.toISOString().slice(0, 16) : '' } })}
+            onChange={date => onChange({ target: { name: 'fecha_inicio', value: date ? date.toISOString() : '' } })}
             showTimeSelect
             timeFormat="HH:mm"
             timeIntervals={15}
@@ -33,7 +46,7 @@ const FiltrosReservas = ({ filtros, onChange, onBuscar }) => {
           <label style={{ fontSize: 13 }}>Fecha fin</label><br />
           <DatePicker
             selected={filtros.fecha_fin ? new Date(filtros.fecha_fin) : null}
-            onChange={date => onChange({ target: { name: 'fecha_fin', value: date ? date.toISOString().slice(0, 16) : '' } })}
+            onChange={date => onChange({ target: { name: 'fecha_fin', value: date ? date.toISOString() : '' } })}
             showTimeSelect
             timeFormat="HH:mm"
             timeIntervals={15}

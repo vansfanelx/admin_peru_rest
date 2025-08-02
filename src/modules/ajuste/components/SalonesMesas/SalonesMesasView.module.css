@@ -6,7 +6,7 @@
   background: #f7f8fa;
   border-radius: 12px;
   box-shadow: 0 2px 8px #0001;
-  margin: 24px;
+  margin: 0;
 }
 
 .panelLeft {
@@ -102,6 +102,8 @@
   padding: 32px;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
 }
 
 .mesasTitle {
@@ -136,7 +138,7 @@
   top: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.18);
+  background: rgba(0, 0, 0, 0.18);
   z-index: 2000;
   display: flex;
   align-items: center;
@@ -182,6 +184,11 @@
   padding: 6px 18px;
   font-size: 15px;
   cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btnModalCancel:hover {
+  background: #ddd;
 }
 
 .btnModalSave {
@@ -192,6 +199,60 @@
   padding: 6px 18px;
   font-size: 15px;
   cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btnModalSave:hover {
+  background: #3742c7;
+}
+
+.btnModalSave:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.btnModalDelete {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 18px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btnModalDelete:hover {
+  background: #c0392b;
+}
+
+.btnModalDelete:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Estilos para mensajes en modales */
+.deleteMessage {
+  margin: 16px 0;
+  color: #495057;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.warningMessage {
+  margin: 16px 0;
+  padding: 12px;
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 6px;
+  color: #856404;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.btnModalDelete:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
 }
 
 .mesasList {
@@ -207,6 +268,9 @@
   padding: 10px 0;
   border-bottom: 1px solid #ececec;
   font-size: 16px;
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.2s ease;
 }
 
 .btnEditar {
@@ -236,4 +300,991 @@
 }
 .btnEliminar:hover {
   background: #c0392b;
+}
+
+/* Estilos para botones con iconos */
+.btnIcono {
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 6px;
+}
+
+.btnIcono:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btnIcono:active {
+  transform: scale(0.95);
+}
+
+.btnIcono:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btnIcono:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Transiciones suaves para el panel de mesas */
+.mesasContainer {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s ease-in-out;
+}
+
+.mesasContainer.loading {
+  opacity: 0.3;
+  transform: translateY(10px);
+}
+
+.mesasLoadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(249, 250, 253, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 8px;
+}
+
+.mesasLoader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e0e0e0;
+  border-top: 3px solid #4e54c8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingText {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Mejoras para lista de mesas */
+.mesaList {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s ease-in-out;
+}
+
+.mesaList.fadeIn {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animaciones escalonadas para items de mesa */
+.mesaItem {
+  animation-fill-mode: both;
+}
+
+.fadeIn .mesaItem {
+  animation-name: fadeInItem;
+  animation-duration: 0.4s;
+  animation-timing-function: ease-out;
+}
+
+@keyframes fadeInItem {
+  from {
+    opacity: 0;
+    transform: translateY(15px) translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateX(0);
+  }
+}
+
+/* Diseño moderno tipo tabla */
+.modernContainer {
+  padding: 0;
+  background: #f8f9fa;
+  min-height: calc(100vh - 80px);
+}
+
+/* Layout de dos columnas */
+.twoColumnLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  height: calc(100vh - 180px);
+  padding: 0;
+}
+
+.leftPanel,
+.rightPanel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.mesasPanelTitle {
+  margin: 0;
+  color: #6c757d;
+  font-size: 16px;
+  font-weight: 500;
+  flex: 1;
+}
+
+.emptyMesasState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: #6c757d;
+}
+
+.emptyMesasState h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.emptyMesasState p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.modernSearchInput {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  transition: border-color 0.2s ease;
+}
+
+.modernSearchInput:focus {
+  outline: none;
+  border-color: #4e54c8;
+  box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.1);
+}
+
+.floatingAddBtn {
+  position: fixed;
+  top: 140px; /* Ajustado para estar debajo del section-header */
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+.floatingAddBtn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+}
+
+.tableContainer {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.modernTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  flex: 1;
+}
+
+.modernTable thead {
+  background: #f8f9fa;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.modernTable tbody {
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
+}
+
+.modernTable thead {
+  background: #f8f9fa;
+}
+
+.modernTable th {
+  padding: 16px 20px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 1px solid #e9ecef;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modernTable td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f1f3f4;
+  vertical-align: middle;
+}
+
+.modernTable tbody tr {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.modernTable tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.selectedRow {
+  background: #e8f4fd !important;
+  border-left: 4px solid #4e54c8;
+}
+
+.nameCell {
+  font-weight: 500;
+  color: #212529;
+}
+
+.numberCell {
+  font-weight: 600;
+  color: #6c757d;
+  text-align: center;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusActive {
+  background: #d4edda;
+  color: #155724;
+}
+
+.statusInactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Estados específicos para mesas */
+.statusLibre {
+  background: #d4edda;
+  color: #155724;
+}
+
+.statusOcupado {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.statusProcesoPago {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.statusReservado {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.statusDesconocido {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+.actionsCell {
+  text-align: center;
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  margin: 0 2px;
+  transition: all 0.2s ease;
+}
+
+.actionBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.actionBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.loadingState,
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #6c757d;
+}
+
+.emptyState {
+  text-align: center;
+  color: #6c757d;
+  padding: 60px 20px;
+  font-style: italic;
+}
+
+.mesasPanel {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.mesasPanelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.mesasPanelHeader h3 {
+  margin: 0;
+  color: #212529;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Paginación mejorada como en el ejemplo */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  color: #6c757d;
+  font-size: 14px;
+  border-top: 1px solid #e9ecef;
+  background: #f8f9fa;
+  border-radius: 0 0 12px 12px;
+}
+
+.paginationControls {
+  display: flex;
+  gap: 4px;
+}
+
+.paginationBtn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #dee2e6;
+  background: white;
+  color: #6c757d;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.paginationBtn:hover:not(:disabled) {
+  background: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.paginationBtn.active {
+  background: #4e54c8;
+  color: white;
+  border-color: #4e54c8;
+}
+
+.paginationBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #f8f9fa;
+}
+
+/* ============ ESTILOS PARA LA NUEVA ESTRUCTURA ============ */
+
+/* Contenedor principal moderno */
+.modernContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 80px);
+  background: #f7f8fa;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 24px;
+  padding: 24px;
+}
+
+/* Layout responsivo de dos columnas */
+.twoColumnLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  flex: 1;
+  margin-top: 20px;
+  min-height: 0;
+}
+
+/* Responsivo para pantallas medianas */
+@media (max-width: 1200px) {
+  .twoColumnLayout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .leftPanel,
+  .rightPanel {
+    min-height: 400px;
+  }
+}
+
+/* Responsivo para pantallas pequeñas */
+@media (max-width: 768px) {
+  .twoColumnLayout {
+    gap: 12px;
+  }
+
+  .panelHeader {
+    padding: 16px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .panelTitle {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .modernSearchInput {
+    min-width: auto;
+    width: 100%;
+  }
+}
+
+/* Paneles izquierdo y derecho */
+.leftPanel,
+.rightPanel {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 600px;
+}
+
+.leftPanel {
+  flex: 0 0 450px;
+}
+
+.rightPanel {
+  flex: 1;
+}
+
+/* Headers de paneles mejorados */
+.panelHeader {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border-radius: 12px 12px 0 0;
+}
+
+.panelTitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: #2c3e50;
+  flex: 1;
+}
+
+.panelHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Contenedores de listas */
+.salonListContainer,
+.mesaListContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+/* Campos de búsqueda mejorados */
+.modernSearchInput {
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fff;
+  transition: border-color 0.2s;
+  min-width: 180px;
+  flex: 1;
+}
+
+.modernSearchInput:focus {
+  outline: none;
+  border-color: #4e54c8;
+  box-shadow: 0 0 0 2px rgba(78, 84, 200, 0.1);
+}
+
+.modernSearchInput::placeholder {
+  color: #6c757d;
+}
+
+/* Mensajes de error */
+.errorMessage {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 12px;
+  border-radius: 6px;
+  margin: 16px 24px;
+}
+
+/* Botones + simples como en el ejemplo */
+.addBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgb(87, 17, 179);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.addBtn:hover {
+  background: #c82333;
+  transform: scale(1.05);
+}
+
+.addBtn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.addBtn:focus {
+  outline: 2px solid #dc3545;
+  outline-offset: 2px;
+}
+
+/* Estados de carga y vacío mejorados */
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #666;
+  gap: 16px;
+  min-height: 200px;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #4e54c8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+  min-height: 200px;
+  font-style: italic;
+}
+
+.emptyMesasState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: #666;
+  text-align: center;
+  min-height: 300px;
+}
+
+.emptyMesasState h3 {
+  margin-bottom: 12px;
+  color: #333;
+  font-size: 18px;
+}
+
+.emptyMesasState p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Tablas como en el ejemplo */
+.tableContainer {
+  flex: 1;
+  overflow-y: auto;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  background: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.modernTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: white;
+  flex: 1;
+}
+
+.modernTable th {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 1px solid #e9ecef;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.modernTable td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+  background: white;
+}
+
+.modernTable tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.modernTable tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.modernTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.selectedRow {
+  background: #e3f2fd !important;
+  border-left: 3px solid #2196f3;
+}
+
+.selectedRow:hover {
+  background: #e3f2fd !important;
+}
+
+.nameCell {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.numberCell {
+  text-align: center;
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.actionsCell {
+  text-align: center;
+  white-space: nowrap;
+  width: 120px;
+}
+
+.actionBtn {
+  border: none;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0 2px;
+  color: white;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.actionBtn:hover {
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+
+.actionBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.statusBadge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusActive {
+  background: #d4edda;
+  color: #155724;
+}
+
+/* Modales */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalForm {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90vw;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.modalTitle {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.modalLabel {
+  display: block;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.modalInput {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-top: 4px;
+  box-sizing: border-box;
+}
+
+.modalInput:focus {
+  outline: none;
+  border-color: #4e54c8;
+  box-shadow: 0 0 0 2px rgba(78, 84, 200, 0.1);
+}
+
+/* Estilos específicos para input file */
+.modalInput[type="file"] {
+  padding: 4px 8px;
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.modalInput[type="file"]:hover {
+  background: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.modalInput[type="file"]:focus {
+  background: white;
+  border-color: #4e54c8;
+  box-shadow: 0 0 0 2px rgba(78, 84, 200, 0.1);
+}
+
+.modalActions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.btnModalCancel {
+  padding: 8px 16px;
+  border: 1px solid #e0e0e0;
+  background: white;
+  color: #666;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.btnModalCancel:hover {
+  background: #f8f9fa;
+}
+
+.btnModalSave {
+  padding: 8px 16px;
+  border: none;
+  background: #4e54c8;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.btnModalSave:hover {
+  background: #3d42a0;
+}
+
+.btnModalSave:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.btnModalDelete {
+  padding: 8px 16px;
+  border: none;
+  background: #dc2626;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.btnModalDelete:hover {
+  background: #b91c1c;
+}
+
+.deleteMessage {
+  margin: 16px 0;
+  color: #333;
+}
+
+.warningMessage {
+  background: #fef3c7;
+  border: 1px solid #fbbf24;
+  color: #92400e;
+  padding: 12px;
+  border-radius: 6px;
+  margin: 16px 0;
+  font-size: 14px;
 }

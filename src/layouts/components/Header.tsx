@@ -33,16 +33,16 @@ const Header: React.FC<HeaderProps> = ({ sidebarOpen, setSidebarOpen }) => {
   };
 
   return (
-    <header>
-      <div className="header-left">
-        <div className="header-logo" style={{ background: 'transparent', borderRadius: 0, boxShadow: 'none', padding: 0 }}>
-          <img src={logoHeader} alt="Logo" style={{ width: 36, height: 36, borderRadius: 0, background: 'transparent', display: 'block', margin: '0 auto' }} />
+    <header style={{ paddingLeft: 0, paddingRight: 8 }}>
+      <div className="header-left" style={{ marginLeft: 16 }}>
+        <div className="header-logo" style={{ background: 'transparent', borderRadius: 0, boxShadow: 'none', padding: 0, margin: 0 }}>
+          <img src={logoHeader} alt="Logo" style={{ width: 36, height: 36, borderRadius: 0, background: 'transparent', display: 'block' }} />
         </div>
         <button
           className="header-menu"
           onClick={() => setSidebarOpen(!sidebarOpen)}
           aria-label="Abrir menú"
-          style={{ background: 'none', border: 'none', padding: 0, marginRight: 16 }}
+          style={{ background: 'none', border: 'none', padding: 0, marginLeft: 8, marginRight: 16 }}
         >
           <img src={menuIcon} alt="Menú" style={{ width: 24, height: 24 }} />
         </button>

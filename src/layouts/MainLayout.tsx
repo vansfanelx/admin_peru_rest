@@ -12,7 +12,7 @@ const MainLayout: React.FC = () => {
     <div className="main-layout">
       <div className="main-header-topbar" />
       <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <div className="main-body">
+  <div className={`main-body${sidebarOpen ? ' sidebar-open' : ''}`}> 
         <Sidebar sidebarOpen={sidebarOpen} />
         <Main>
           <Outlet />

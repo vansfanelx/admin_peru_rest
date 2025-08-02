@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface SidebarProps {
@@ -86,11 +86,6 @@ const menuItems: MenuItem[] = [
     key: 'ajustes',
     icon: iconSidebarSettings,
     label: 'Ajustes',
-    arrow: true,
-    subitems: [
-      { key: 'salones-mesas', label: 'Salones y Mesas' },
-      // Puedes agregar más subitems aquí si lo deseas
-    ],
   },
   { key: 'tablero', icon: iconSidebarActivity, label: 'Tablero' },
 ];
@@ -105,6 +100,28 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
   const [submenuPosition, setSubmenuPosition] = useState<{ x: number; y: number } | null>(null);
   const [submenuFixed, setSubmenuFixed] = useState<string | null>(null);
+
+  // Cerrar menú flotante fijado al hacer click fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (submenuFixed && !sidebarOpen) {
+        const target = event.target as HTMLElement;
+        const isInsideSidebar = target.closest('.main-sidebar');
+        const isInsideFloatingMenu = target.closest('.sidebar-submenu-floating');
+        
+        if (!isInsideSidebar && !isInsideFloatingMenu) {
+          setSubmenuFixed(null);
+          setHoveredMenu(null);
+          setSubmenuPosition(null);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [submenuFixed, sidebarOpen]);
 
   const handleMenuClick = (key: string, hasSubitems: boolean) => {
     setActive(key);
@@ -124,9 +141,31 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
     if (hasSubitems) {
       if (sidebarOpen) {
         setOpenSubmenu(openSubmenu === key ? null : key);
+      } else {
+        // En modo colapsado, fijar el menú flotante para que se mantenga abierto
+        if (submenuFixed === key) {
+          setSubmenuFixed(null);
+          setHoveredMenu(null);
+          setSubmenuPosition(null);
+        } else {
+          setSubmenuFixed(key);
+          setHoveredMenu(key);
+          // Mantener la posición del menú
+          const menuElement = document.querySelector(`[data-menu-key="${key}"]`) as HTMLElement;
+          if (menuElement) {
+            const rect = menuElement.getBoundingClientRect();
+            setSubmenuPosition({ x: rect.right, y: rect.top });
+          }
+        }
       }
     } else {
       setOpenSubmenu(null);
+      // Solo cerrar menús flotantes si no es un item con submenús
+      if (!sidebarOpen) {
+        setSubmenuFixed(null);
+        setHoveredMenu(null);
+        setSubmenuPosition(null);
+      }
       if (key === 'reservas') {
         navigate('/reservas');
         return;
@@ -160,25 +199,26 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
           <React.Fragment key={item.key}>
             <div
               className={`sidebar-menu-item${active === item.key ? ' sidebar-menu-active sidebar-menu-animate' : ''}${idx !== 0 ? ' sidebar-menu-item-bordered' : ''}`}
+              data-menu-key={item.key}
               onClick={e => {
-                handleMenuClick(item.key, !!item.subitems);
-                if (!sidebarOpen) {
-                  // Al hacer click, cerrar cualquier menú flotante
-                  setHoveredMenu(null);
-                  setSubmenuFixed(null);
-                  setSubmenuPosition(null);
+                // Si está extendido y tiene subitems, abrir/cerrar submenú
+                if (sidebarOpen && item.subitems) {
+                  setOpenSubmenu(openSubmenu === item.key ? null : item.key);
+                } else {
+                  handleMenuClick(item.key, !!item.subitems);
                 }
               }}
               onMouseEnter={e => {
                 if (!sidebarOpen && !submenuFixed) {
                   setHoveredMenu(item.key);
                   const rect = (e.target as HTMLElement).getBoundingClientRect();
-                  setSubmenuPosition({ x: rect.right, y: e.clientY });
+                  setSubmenuPosition({ x: rect.right, y: rect.top });
                 }
               }}
               onMouseMove={e => {
                 if (!sidebarOpen && hoveredMenu === item.key && !submenuFixed) {
-                  setSubmenuPosition({ x: e.clientX, y: e.clientY });
+                  const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                  setSubmenuPosition({ x: rect.right, y: rect.top });
                 }
               }}
               onMouseLeave={() => {
@@ -228,30 +268,35 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
               </div>
             )}
             {/* Menú flotante SIEMPRE en modo colapsado, siempre muestra el nombre y subíndices si existen */}
-            {!sidebarOpen && hoveredMenu === item.key && submenuPosition && (
+            {!sidebarOpen && (hoveredMenu === item.key || submenuFixed === item.key) && submenuPosition && (
               <div
                 className="sidebar-submenu sidebar-submenu-floating"
                 style={{
                   position: 'fixed',
                   left: (submenuPosition?.x ?? 0) + 10,
-                  top: (submenuPosition?.y ?? 0) - 20,
+                  top: (submenuPosition?.y ?? 0),
                   zIndex: 1000,
                   minWidth: 180,
                   background: '#fff',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                   borderRadius: 6,
                   padding: item.subitems ? '0 0 8px 0' : '0',
                   pointerEvents: 'auto',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'stretch',
+                  border: submenuFixed === item.key ? '2px solid #4e54c8' : '1px solid #e9ecef',
                 }}
                 onMouseEnter={() => {
-                  setHoveredMenu(item.key);
+                  if (!submenuFixed) {
+                    setHoveredMenu(item.key);
+                  }
                 }}
                 onMouseLeave={() => {
-                  setHoveredMenu(null);
-                  setSubmenuPosition(null);
+                  if (!submenuFixed) {
+                    setHoveredMenu(null);
+                    setSubmenuPosition(null);
+                  }
                 }}
               >
                 {/* Nombre del módulo arriba del submenu o solo el nombre si no hay subíndices */}
@@ -276,9 +321,21 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
                     onClick={e => {
                       e.stopPropagation();
                       setActive(sub.key);
+                      // Solo cerrar el menú flotante si no está fijado, o si está fijado, cerrarlo también
+                      if (submenuFixed === item.key) {
+                        setSubmenuFixed(null);
+                      }
                       setHoveredMenu(null);
                       setSubmenuPosition(null);
-                      setSubmenuFixed(null);
+                      
+                      // Navegación
+                      if (sub.key === 'salones-mesas') {
+                        navigate('/ajuste/salones-mesas');
+                      } else if (sub.key === 'listar-reservas') {
+                        navigate('/reservas');
+                      } else if (sub.key === 'registrar-reservas') {
+                        navigate('/reservas?modal=nueva');
+                      }
                     }}
                   >
                     {sub.label}
@@ -294,3 +351,4 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
 };
 
 export default Sidebar;
+

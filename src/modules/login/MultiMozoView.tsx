@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './LoginView.css';
 import { loginMozo } from '../../api/api';
 
@@ -7,7 +7,36 @@ const MultiMozoView: React.FC<{ onAdmin: () => void }> = ({ onAdmin }) => {
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [sessionExpired, setSessionExpired] = useState(false);
 
+  // Obtener token y expiración cada vez que se renderiza el componente
+  const token = localStorage.getItem('token');
+  const expiresAt = localStorage.getItem('token_expires_at');
+
+  // Efecto para cerrar sesión automáticamente cuando expire el token
+  useEffect(() => {
+    if (!token || !expiresAt) return;
+    const interval = setInterval(() => {
+      const now = new Date();
+      if (new Date(expiresAt) <= now) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('token_expires_at');
+        localStorage.removeItem('user');
+        setSessionExpired(true);
+      }
+    }, 1000 * 30); // Verifica cada 30 segundos
+    return () => clearInterval(interval);
+  }, [token, expiresAt]);
+
+  // Limpia sesión si ya expiró al cargar
+  useEffect(() => {
+    if (token && expiresAt && new Date() >= new Date(expiresAt)) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('token_expires_at');
+      localStorage.removeItem('user');
+      setSessionExpired(true);
+    }
+  }, []);
   const handleVirtualKey = (val: string) => {
     if (val === 'DEL') {
       setCode(code.slice(0, -1));
@@ -102,6 +131,9 @@ const MultiMozoView: React.FC<{ onAdmin: () => void }> = ({ onAdmin }) => {
                     {loading ? 'Cargando...' : 'CONTINUAR'}
                   </button>
                   {error && <div className="alert alert-danger mt-2">{error}</div>}
+                  {sessionExpired && (
+                    <div className="alert alert-warning mt-2">Tu sesión ha expirado. Por favor, inicia sesión nuevamente.</div>
+                  )}
                 </form>
                 <button
                   className="btn btn-block btn-lg btn-multimozo"
